@@ -1,0 +1,3 @@
+isotope-packaging-slip-barcode-scanner-bundle.controller:
+  resource: '@IsotopePackagingSlipBarcodeScannerBundle/Controller'
+  type: annotation

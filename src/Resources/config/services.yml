@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  Krabo\IsotopePackagingSlipBarcodeScannerBundle\Controller\BarcodePackageslipController: ~
+  Krabo\IsotopePackagingSlipBarcodeScannerBundle\EventListener\BackendMenuListener: ~
+  krabo.isotopepackagingslipbarcodescanner.helper:
+    class: Krabo\IsotopePackagingSlipBarcodeScannerBundle\Helper\PickupShopHelper
+    public: true
