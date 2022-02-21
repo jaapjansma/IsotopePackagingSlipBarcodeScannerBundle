@@ -33,15 +33,28 @@ class PackagingSlipStatusChangedEvent {
    */
   protected $packagingSlip;
 
-  public function __construct(IsotopePackagingSlipModel $packagingSlipModel) {
+  /**
+   * @var array
+   */
+  protected array $submittedData = [];
+
+  public function __construct(IsotopePackagingSlipModel $packagingSlipModel, array $submittedData=[]) {
     $this->packagingSlip = $packagingSlipModel;
+    $this->submittedData = $submittedData;
   }
 
   /**
    * @return \Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipModel
    */
-  public function getPackagingSlip() {
+  public function getPackagingSlip(): IsotopePackagingSlipModel {
     return $this->packagingSlip;
+  }
+
+  /**
+   * @return array
+   */
+  public function getSubmittedData(): array {
+    return $this->submittedData;
   }
 
 }

@@ -16,9 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['barcode_scanner'] = 'Isotope Barcode Scanner';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_store'] = ['Store', 'Barcode Scanner for Store'];
-$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'] = ['Pickup %s', 'Barcode Scanner for Pickup at %s'];
-$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'] = ['Delivery %s', 'Barcode Scanner for Delivery at %s'];
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'] = ['Pickup \'%s\'', 'Barcode Scanner pickup at %s'];
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'] = ['Prepare for pickup \'%s\'', 'Barcode Scanner prepare for pickup at %s'];
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirmBarcodeStore'] = 'Confirm';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipNotFound'] = "No package slip found with status prepare for sending for %s";
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['OrderNotPaid'] = 'Order %s is not paid.';

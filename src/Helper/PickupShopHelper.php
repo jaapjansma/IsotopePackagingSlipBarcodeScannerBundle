@@ -21,6 +21,7 @@ namespace Krabo\IsotopePackagingSlipBarcodeScannerBundle\Helper;
 use Contao\Backend;
 use Contao\BackendUser;
 use Contao\System;
+use Isotope\Model\Shipping;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\PickupShippingMethodEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -47,7 +48,7 @@ class PickupShopHelper {
   /**
    * @return \Isotope\Model\Shipping[]
    */
-  public function getRestrictedPickupShopShippingMethods() {
+  public function getRestrictedPickupShopShippingMethods(): array {
     $shippingMethods = $this->getPickupShopShippingMethods();
     $user = BackendUser::getInstance();
     if ($user->id && !$user->restrict_pickup_shop) {
@@ -62,6 +63,32 @@ class PickupShopHelper {
       return $return;
     }
     return [];
+  }
+
+  /**
+   * @param int $shopId
+   * @return \Isotope\Model\Shipping
+   */
+  public function getRestrictedPickupShopShippingMethod(int $shopId): Shipping {
+    $shippingMethods = $this->getRestrictedPickupShopShippingMethods();
+    return $shippingMethods[$shopId];
+  }
+
+  /**
+   * Returns whether a user has access to the barcode scanner functionality for the store.
+   *
+   * @return bool
+   */
+  public function hasUserAccessToStore(): bool {
+    $user = BackendUser::getInstance();
+    if ($user->id && !$user->restrict_pickup_shop) {
+      return TRUE;
+    } elseif ($user->id) {
+      if (in_array('__store', $user->restricted_pickup_shops)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
 }

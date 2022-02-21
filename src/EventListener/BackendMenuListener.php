@@ -60,39 +60,61 @@ class BackendMenuListener {
       return;
     }
 
-    $contentNode = $tree->getChild('isotope');
+    $parentNode = $factory
+      ->createItem('isotope_packaging_slip_barcode_scanner')
+      ->setUri($this->requestStack->getCurrentRequest()->getUri())
+      ->setLinkAttribute('onclick', 'return AjaxRequest.toggleNavigation(this, \'isotope_packaging_slip_barcode_scanner\', \'/contao\')')
+      ->setLabel($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['barcode_scanner'])
+      ->setChildrenAttribute('id', 'isotope_packaging_slip_barcode_scanner');
+    $tree->addChild($parentNode);
+    $newOrder = [];
+    foreach($tree->getChildren() as $name => $child) {
+      if ($name == 'isotope') {
+        $newOrder[] = $name;
+        $newOrder[] = 'isotope_packaging_slip_barcode_scanner';
+      }
+      elseif ($name == 'isotope_packaging_slip_barcode_scanner') {
+        continue;
+      }
+      else {
+        $newOrder[] = $name;
+      }
+    }
+    $tree->reorderChildren($newOrder);
 
-    $node = $factory
-      ->createItem('isotopepackagingslipbarcodescanner_confirmstore')
-      ->setUri($this->router->generate('isotopepackagingslipbarcodescanner_confirmstore'))
-      ->setLabel($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_store'][0])
-      ->setLinkAttribute('title', $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_store'][1])
-      ->setLinkAttribute('class', 'isotopepackagingslipbarcodescanner_confirmstore')
-      ->setCurrent($this->requestStack->getCurrentRequest()->get('_controller') === 'isotopepackagingslipbarcodescanner_confirmstore')
-    ;
-    $contentNode->addChild($node);
+    if ($this->container->get('krabo.isotopepackagingslipbarcodescanner.helper')->hasUserAccessToStore()) {
+      $node = $factory
+        ->createItem('isotopepackagingslipbarcodescanner_confirmstore')
+        ->setUri($this->router->generate('isotopepackagingslipbarcodescanner_confirmstore'))
+        ->setLabel($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_store'][0])
+        ->setLinkAttribute('title', $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_store'][1])
+        ->setLinkAttribute('class', 'isotopepackagingslipbarcodescanner_confirmstore')
+        ->setCurrent($this->requestStack->getCurrentRequest()
+            ->get('_controller') === 'isotopepackagingslipbarcodescanner_confirmstore');
+      $parentNode->addChild($node);
+    }
 
     $pickupShops = $this->getAvailablePickupShops();
     foreach($pickupShops as $pickupShop) {
       $nodePickup = $factory
         ->createItem('isotopepackagingslipbarcodescanner_confirmshop_'.$pickupShop->id)
         ->setUri($this->router->generate('isotopepackagingslipbarcodescanner_confirmshop', ['shopId' => $pickupShop->id]))
-        ->setLabel(sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'][0], $pickupShop->getLabel()))
-        ->setLinkAttribute('title', sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'][1], $pickupShop->getLabel()))
+        ->setLabel(html_entity_decode(sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'][0], $pickupShop->name)))
+        ->setLinkAttribute('title', sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'][1], $pickupShop->name))
         ->setLinkAttribute('class', 'isotopepackagingslipbarcodescanner_confirmhop isotopepackagingslipbarcodescanner_confirmhop_'.$pickupShop->id)
         ->setCurrent($this->requestStack->getCurrentRequest()->get('_controller') === 'isotopepackagingslipbarcodescanner_confirmshop_'.$pickupShop->id)
       ;
-      $contentNode->addChild($nodePickup);
+      $parentNode->addChild($nodePickup);
 
       $nodeDelivery = $factory
         ->createItem('isotopepackagingslipbarcodescanner_deliveryshop_'.$pickupShop->id)
         ->setUri($this->router->generate('isotopepackagingslipbarcodescanner_deliveryshop', ['shopId' => $pickupShop->id]))
-        ->setLabel(sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'][0], $pickupShop->getLabel()))
-        ->setLinkAttribute('title', sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'][1], $pickupShop->getLabel()))
+        ->setLabel(html_entity_decode(sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'][0], $pickupShop->name)))
+        ->setLinkAttribute('title', sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'][1], $pickupShop->name))
         ->setLinkAttribute('class', 'isotopepackagingslipbarcodescanner_confirmhop isotopepackagingslipbarcodescanner_deliveryhop_'.$pickupShop->id)
         ->setCurrent($this->requestStack->getCurrentRequest()->get('_controller') === 'isotopepackagingslipbarcodescanner_deliveryshop_'.$pickupShop->id)
       ;
-      $contentNode->addChild($nodeDelivery);
+      $parentNode->addChild($nodeDelivery);
     }
 
   }

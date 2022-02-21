@@ -38,6 +38,10 @@
                         <td>{{ packagingSlip.statusLabel }}</td>
                     </tr>
                     <tr>
+                        <th style="width: 20%;">{{ lang.shipping_date.0 }}</th>
+                        <td>{{ shippingDate }}</td>
+                    </tr>
+                    <tr>
                         <th style="width: 20%;"></th>
                         <td><br/>{{ packagingSlip.generateAddress|raw }}</td>
                     </tr>
@@ -90,6 +94,24 @@
                 <h3>{{ form_label(form.document_number) }}</h3>
                 {{ form_widget(form.document_number) }}
             </div>
+            {% if packagingSlip %}
+            <div class="widget">
+                <h3>{{ form_label(form.shipping_date) }}</h3>
+                {{ form_widget(form.shipping_date) }}
+            </div>
+            {% else %}
+                {%- do form.shipping_date.setRendered() -%}
+            {% endif %}
+            {% for additionalWidget in additional_widgets %}
+                {% if packagingSlip %}
+                    <div class="widget">
+                        <h3>{{ form_label(attribute(form, additionalWidget)) }}</h3>
+                        {{ form_widget(attribute(form, additionalWidget)) }}
+                    </div>
+                {% else %}
+                    {%- do attribute(form, additionalWidget).setRendered() -%}
+                {% endif %}
+            {% endfor %}
         </fieldset>
 
         <div class="clear"></div>

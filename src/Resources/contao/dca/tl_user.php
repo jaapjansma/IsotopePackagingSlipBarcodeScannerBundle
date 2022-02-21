@@ -29,7 +29,9 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['restricted_pickup_shops'] = [
   'eval'                    => array('tl_class' => 'w50', 'multiple' => true),
   'sql'                     => "varchar(255) NOT NULL default ''",
   'options_callback'        => function(\Contao\DataContainer $dc=null) {
-    $return = [];
+    $return = [
+      '__store' => $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_store'][0],
+    ];
     $shippingMethods = \Contao\System::getContainer()->get('krabo.isotopepackagingslipbarcodescanner.helper')->getPickupShopShippingMethods();
     foreach($shippingMethods as $shippingMethod) {
       $return[$shippingMethod->id] = $shippingMethod->label;
