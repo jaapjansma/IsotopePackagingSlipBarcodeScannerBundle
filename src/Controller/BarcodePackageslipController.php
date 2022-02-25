@@ -31,7 +31,6 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,11 +52,6 @@ class BarcodePackageslipController extends AbstractController {
   private $tokenManager;
 
   /**
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  private $requestStack;
-
-  /**
    * @var string
    */
   private $csrfTokenName;
@@ -67,11 +61,10 @@ class BarcodePackageslipController extends AbstractController {
    */
   private $helper;
 
-  public function __construct(TwigEnvironment $twig, ContaoCsrfTokenManager $tokenManager, RequestStack $requestStack)
+  public function __construct(TwigEnvironment $twig, ContaoCsrfTokenManager $tokenManager)
   {
     $this->twig = $twig;
     $this->tokenManager = $tokenManager;
-    $this->requestStack = $requestStack;
     $this->csrfTokenName = System::getContainer()->getParameter('contao.csrf_token_name');
     $this->helper = System::getContainer()->get('krabo.isotopepackagingslipbarcodescanner.helper');
     $packagingSlipTable = IsotopePackagingSlipModel::getTable();
@@ -128,7 +121,7 @@ class BarcodePackageslipController extends AbstractController {
     $redirectUrl = $this->generateUrl('isotopepackagingslipbarcodescanner_confirmshop', ['shopId' => $shopId]);
     return $this->generate(
       $request,
-      html_entity_decode(spintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'][0], $shippingMethod->name)),
+      html_entity_decode(sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'][0], $shippingMethod->name)),
       IsotopePackagingSlipModel::STATUS_READY_FOR_PICKUP,
       IsotopePackagingSlipModel::STATUS_PICKED_UP,
       $redirectUrl,
