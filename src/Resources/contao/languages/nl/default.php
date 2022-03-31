@@ -18,8 +18,8 @@
 
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['barcode_scanner'] = 'Isotope Barcode Scanner';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_store'] = ['Magazijn', 'Barcode Scanner in magazijn'];
-$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'] = ['Afhaal \'%s\'', 'Barcode Scanner afhalen bij %s'];
-$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'] = ['Inpakken \'%s\'', 'Barcode Scanner inpakken voor afhalen bij %s'];
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'] = ['Afgehaald \'%s\'', 'Barcode Scanner tijdens afhalen bij %s'];
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'] = ['Klaarzetten voor \'%s\'', 'Barcode Scanner inpakken voor afhalen bij %s'];
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirmBarcodeStore'] = 'Bevestig';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipNotFound'] = "Er zijn geen pakbonnen gevonden met de status gereed voor inpakken voor %s";
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['OrderNotPaid'] = 'Bestelling %s is niet betaald.';

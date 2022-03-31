@@ -20,11 +20,13 @@ namespace Krabo\IsotopePackagingSlipBarcodeScannerBundle\Controller;
 
 use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\Message;
+use Contao\StringUtil;
 use Contao\System;
 use Isotope\Model\Shipping;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\FormBuilderEvent;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\PackagingSlipStatusChangedEvent;
 use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipModel;
+use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipShipperModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -154,7 +156,7 @@ class BarcodePackageslipController extends AbstractController {
         'class' => 'tl_text',
       ],
       'row_attr' => [
-        'class' => 'widget'
+        'class' => 'w50 widget clr'
       ],
     ]);
     $formBuilder->add('shipping_date', DateType::class, [
@@ -167,7 +169,7 @@ class BarcodePackageslipController extends AbstractController {
         'class' => 'tl_text',
       ],
       'row_attr' => [
-        'class' => 'w50 widget'
+        'class' => 'w50 widget clr'
       ]
     ]);
     if ($request->getSession()->has('isotopepackagingslipbarcodescanner_shipping_date')) {
@@ -196,12 +198,23 @@ class BarcodePackageslipController extends AbstractController {
     if ($form->isSubmitted() && $form->isValid()) {
       $submittedData = $form->getData();
       $packagingSlip = IsotopePackagingSlipModel::findOneBy('document_number', $submittedData['document_number']);
+      $isStoreShipper = false;
+      if ($packagingSlip->shipper_id) {
+        $shipper = IsotopePackagingSlipShipperModel::findByPk($packagingSlip->shipper_id);
+        if ($shipper && $shipper->store_handling) {
+          $isStoreShipper = true;
+        }
+      }
       if (!$packagingSlip || $packagingSlip->status != $currentStatus) {
         $msg = sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipNotFound'], $submittedData['document_number']);
         Message::addError($msg, 'isotopepackagingslipbarcodescanner_confirmstore');
         return $this->redirect($redirectUrl);
       }
       elseif ($shopId && $packagingSlip->shipping_id != $shopId) {
+        $msg = sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipNotFound'], $submittedData['document_number']);
+        Message::addError($msg, 'isotopepackagingslipbarcodescanner_confirmstore');
+        return $this->redirect($redirectUrl);
+      } elseif (!$shopId && !$isStoreShipper) {
         $msg = sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipNotFound'], $submittedData['document_number']);
         Message::addError($msg, 'isotopepackagingslipbarcodescanner_confirmstore');
         return $this->redirect($redirectUrl);
@@ -230,6 +243,10 @@ class BarcodePackageslipController extends AbstractController {
       $shippingMethod = Shipping::findByPk($packagingSlip->shipping_id);
       $viewData['packagingSlip'] = $packagingSlip;
       $viewData['shippingMethod'] = $shippingMethod;
+      $viewData['shippingMethodNote'] = '';
+      if ($shippingMethod->note) {
+        $viewData['shippingMethodNote'] = StringUtil::restoreBasicEntities($shippingMethod->note);
+      }
       $viewData['shippingDate'] = '';
       $viewData['orders'] = $packagingSlip->getOrders();
       $formBuilder->get('confirm_document_number')

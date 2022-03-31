@@ -29,6 +29,12 @@
                         <th style="width: 20%;">{{ lang.shipping_id.0 }}</th>
                         <td>{{ shippingMethod.label }}</td>
                     </tr>
+                    {%  if shippingMethodNote %}
+                    <tr>
+                        <th style="width: 20%;"></th>
+                        <td><br />{{ shippingMethodNote|raw }}</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th style="width: 20%;">{{ lang.order_id.0 }}</th>
                         <td>{{ packagingSlip.orderDocumentNumbers }}</td>
@@ -72,14 +78,11 @@
                             <strong>{{ lang_msc.PackageSlipProductIdSku }}</strong></th>
                         <th style="width: 80%; text-align: left;">
                             <strong>{{ lang_msc.PackageSlipProductIdName }}</strong></th>
-                        <th style="width: 10%; text-align: right;">
-                            <strong>{{ lang_msc.PackageSlipProductIdQuantity }}</strong></th>
                     </tr>
                     {% for product in packagingSlip.productsCombinedByProductId %}
                         <tr>
-                            <td style="width: 20%;">{{ product.product.sku }}</td>
-                            <td>{{ product.product.name }}</td>
-                            <td style="width: 20%; text-align: right;">{{ product.quantity }}</td>
+                            <td style="width: 20%;">{{ product.quantity }} x {{ product.product.sku }}</td>
+                            <td>{{ product.product.name|raw }}</td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -90,12 +93,12 @@
         {{ form_errors(form) }}
 
         <fieldset class="tl_tbox nolegend">
-            <div class="widget">
+            <div class="widget w50 clr">
                 <h3>{{ form_label(form.document_number) }}</h3>
                 {{ form_widget(form.document_number) }}
             </div>
             {% if packagingSlip %}
-            <div class="widget">
+            <div class="widget w50 clr">
                 <h3>{{ form_label(form.shipping_date) }}</h3>
                 {{ form_widget(form.shipping_date) }}
             </div>
@@ -104,7 +107,7 @@
             {% endif %}
             {% for additionalWidget in additional_widgets %}
                 {% if packagingSlip %}
-                    <div class="widget">
+                    <div class="widget w50 clr">
                         <h3>{{ form_label(attribute(form, additionalWidget)) }}</h3>
                         {{ form_widget(attribute(form, additionalWidget)) }}
                     </div>
