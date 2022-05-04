@@ -54,16 +54,14 @@
                     <tr>
                         <th style="width: 20%;"></th>
                         <td><br />
-                            {% set amount_to_paid = 0.00 %}
                             {% for order in orders %}
                                 {% if not order.paid %}
-                                    {% set amount_to_paid = amount_to_paid + order.total %}
                                     <p class="order_not_paid">{{ 'IsotopePackagingSlipBarcodeScannerBundle.OrderNotPaid'|trans({'%s': order.document_number}, 'contao_default') }}</p>
                                 {% else %}
                                     <p class="order_paid">{{ 'IsotopePackagingSlipBarcodeScannerBundle.OrderPaid'|trans({'%s': order.document_number}, 'contao_default') }}</p>
                                 {% endif %}
                             {% endfor %}
-                            {% if amount_to_paid > 0.00 %}
+                            {% if amount_to_paid %}
                                 <p class="amount_to_paid">{{ 'IsotopePackagingSlipBarcodeScannerBundle.AmountToPaid'|trans({'%s': amount_to_paid}, 'contao_default') }}</p>
                             {% endif %}
                         </td>

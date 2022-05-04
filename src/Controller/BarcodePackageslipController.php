@@ -228,11 +228,18 @@ class BarcodePackageslipController extends AbstractController {
         }
         $packagingSlip->status = $newStatus;
         if ($shippingDate) {
+          if ($shippingDate > $today) {
+            $shippingDate->setTime(10, 0);
+          }
           $packagingSlip->shipping_date = $shippingDate->getTimestamp();
         } elseif (empty($packagingSlip->shipping_date)) {
           $packagingSlip->shipping_date = $today->getTimestamp();
         }
         $packagingSlip->save();
+        foreach($packagingSlip->getOrders() as $order) {
+          $order->setDateShipped($packagingSlip->shipping_date);
+          $order->save();
+        }
         $this->triggerStatusEvent($packagingSlip, $submittedData, $eventName);
         $newStatusLabel = $GLOBALS['TL_LANG'][$packagingSlipTable]['status_options'][$newStatus];
         $msg = sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['StatusUpdated'], $newStatusLabel);
@@ -249,6 +256,7 @@ class BarcodePackageslipController extends AbstractController {
       }
       $viewData['shippingDate'] = '';
       $viewData['orders'] = $packagingSlip->getOrders();
+      $viewData['amount_to_paid'] = $packagingSlip->getAmountToPaid();
       $formBuilder->get('confirm_document_number')
         ->setData($submittedData['document_number']);
 
@@ -256,7 +264,7 @@ class BarcodePackageslipController extends AbstractController {
       if ($packagingSlip->shipping_date) {
         $shippingDate = new \DateTime();
         $shippingDate->setTimestamp($packagingSlip->shipping_date);
-        $viewData['shippingDate'] = $shippingDate->format('d-m-Y');
+        $viewData['shippingDate'] = $shippingDate->format('d-m-Y H:i');
       } elseif ($submittedData['shipping_date']) {
         $shippingDate = $submittedData['shipping_date'];
       }
