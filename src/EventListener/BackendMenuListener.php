@@ -68,10 +68,12 @@ class BackendMenuListener {
       ->setChildrenAttribute('id', 'isotope_packaging_slip_barcode_scanner');
     $tree->addChild($parentNode);
     $newOrder = [];
+    $orderChanged = FALSE;
     foreach($tree->getChildren() as $name => $child) {
       if ($name == 'isotope') {
         $newOrder[] = $name;
         $newOrder[] = 'isotope_packaging_slip_barcode_scanner';
+        $orderChanged = TRUE;
       }
       elseif ($name == 'isotope_packaging_slip_barcode_scanner') {
         continue;
@@ -80,8 +82,9 @@ class BackendMenuListener {
         $newOrder[] = $name;
       }
     }
-    $tree->reorderChildren($newOrder);
-
+    if ($orderChanged) {
+      $tree->reorderChildren($newOrder);
+    }
     if ($this->container->get('krabo.isotopepackagingslipbarcodescanner.helper')->hasUserAccessToStore()) {
       $node = $factory
         ->createItem('isotopepackagingslipbarcodescanner_confirmstore')
