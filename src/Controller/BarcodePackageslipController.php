@@ -235,12 +235,12 @@ class BarcodePackageslipController extends AbstractController {
         } elseif (empty($packagingSlip->shipping_date)) {
           $packagingSlip->shipping_date = $today->getTimestamp();
         }
-        $packagingSlip->save();
+        $this->triggerStatusEvent($packagingSlip, $submittedData, $eventName);
         foreach($packagingSlip->getOrders() as $order) {
           $order->setDateShipped($packagingSlip->shipping_date);
           $order->save();
         }
-        $this->triggerStatusEvent($packagingSlip, $submittedData, $eventName);
+        $packagingSlip->save();
         $newStatusLabel = $GLOBALS['TL_LANG'][$packagingSlipTable]['status_options'][$newStatus];
         $msg = sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['StatusUpdated'], $newStatusLabel);
         Message::addInfo($msg, 'isotopepackagingslipbarcodescanner_confirmstore');
