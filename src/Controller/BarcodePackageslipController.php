@@ -24,6 +24,7 @@ use Contao\StringUtil;
 use Contao\System;
 use Isotope\Model\Shipping;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\FormBuilderEvent;
+use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\FormBuilderWithPackagingSlipEvent;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\PackagingSlipStatusChangedEvent;
 use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipModel;
 use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipShipperModel;
@@ -145,7 +146,7 @@ class BarcodePackageslipController extends AbstractController {
       'lang' => $GLOBALS['TL_LANG'][$packagingSlipTable],
       'lang_msc' => $GLOBALS['TL_LANG']['MSC'],
       'packagingSlip' => null,
-      'messages' => Message::generateUnwrapped('isotopepackagingslipbarcodescanner_confirmstore', false),
+      'messages' => '',
       'additional_widgets' => [],
     ];
     $defaultData = [];
@@ -277,10 +278,14 @@ class BarcodePackageslipController extends AbstractController {
         $formBuilder->get('shipping_date')->setData($shippingDate);
       }
 
+      $formBuilderWithPackagingSlipEvent = new FormBuilderWithPackagingSlipEvent($formBuilder, $shopId ?? '__store', $packagingSlip);
+      System::getContainer()->get('event_dispatcher')->dispatch($formBuilderWithPackagingSlipEvent, FormBuilderWithPackagingSlipEvent::EVENT_NAME);
+
       $form = $formBuilder->getForm();
     }
 
     $viewData['form'] = $form->createView();
+    $viewData['messages'] = Message::generateUnwrapped('isotopepackagingslipbarcodescanner_confirmstore', false);
     return new Response($this->twig->render('@IsotopePackagingSlipBarcodeScanner/confirmstore.html.twig', $viewData));
   }
 
