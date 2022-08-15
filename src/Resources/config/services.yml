@@ -5,6 +5,7 @@ services:
 
   Krabo\IsotopePackagingSlipBarcodeScannerBundle\Controller\BarcodePackageslipController: ~
   Krabo\IsotopePackagingSlipBarcodeScannerBundle\EventListener\BackendMenuListener: ~
+  Krabo\IsotopePackagingSlipBarcodeScannerBundle\Twig\TwigExtension: ~
   krabo.isotopepackagingslipbarcodescanner.helper:
     class: Krabo\IsotopePackagingSlipBarcodeScannerBundle\Helper\PickupShopHelper
     public: true

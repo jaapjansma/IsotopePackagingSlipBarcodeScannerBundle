@@ -26,3 +26,4 @@ $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['OrderNotPaid'] 
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['OrderPaid'] = 'Bestelling %s is betaald.';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['AmountToPaid'] = 'Opstaand bedrag: %s';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['StatusUpdated'] = 'Status aangepast naar %s';
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['NotEnoughInStock'] = 'Niet voorradig';

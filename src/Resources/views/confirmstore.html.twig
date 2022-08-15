@@ -19,6 +19,12 @@
         .barcodepackagingslip .order_not_paid {
             color: red;
         }
+        .in-stock {
+            color: green;
+        }
+        .out-of-stock {
+            color: red;
+        }
     </style>
     <div class="tl_listing_container barcodepackagingslip">
         {%  if messages %}{{ messages|raw }}{%  endif %}
@@ -72,14 +78,17 @@
 
                 <table cellspacing="0" cellpadding="0" border="0" style="width: 100%;">
                     <tr>
-                        <th style="width: 10%; text-align: left;">
+                        <th style="width: 20%; text-align: left;">
                             <strong>{{ lang_msc.PackageSlipProductIdSku }}</strong></th>
-                        <th style="width: 80%; text-align: left;">
+                        <th style="width: 10%; text-align: left;">
+                            <strong>{{ isotopePackagingSlipBarcodeScannerAccountTitle(packagingSlip.credit_account) }}</strong></th>
+                        <th style="width: 70%; text-align: left;">
                             <strong>{{ lang_msc.PackageSlipProductIdName }}</strong></th>
                     </tr>
                     {% for product in packagingSlip.productsCombinedByProductId %}
                         <tr>
                             <td style="width: 20%;">{{ product.quantity }} x {{ product.product.sku }}</td>
+                            <td style="width: 10%;">{{ isotopePackagingSlipBarcodeScannerProductStock(product.product.id, packagingSlip.credit_account, 1, product.quantity)|raw }}</td>
                             <td>{{ product.product.name|raw }}</td>
                         </tr>
                     {% endfor %}
