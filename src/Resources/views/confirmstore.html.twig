@@ -134,12 +134,12 @@
         {{ form_end(form) }}
     </div>
     <script type="text/javascript">
-      jQuery(document).ready(function () {
-        jQuery('#form_document_number').val('');
-        jQuery('#form_document_number').focus();
-        jQuery('#form_document_number').keypress(function(event) {
+      window.addEvent('domready', function() {
+        $$('#form_document_number').val('');
+        $$('#form_document_number').focus();
+        $$('#form_document_number').keypress(function(event) {
           if (event.keyCode == 13) {
-            jQuery('form[name=form]').submit();
+            $$('form[name=form]').submit();
           }
         });
       });

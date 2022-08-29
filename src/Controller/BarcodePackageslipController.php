@@ -139,7 +139,6 @@ class BarcodePackageslipController extends AbstractController {
     } else {
       $this->checkAccessToStore();
     }
-    $GLOBALS['TL_JAVASCRIPT'][] = 'assets/jquery/js/jquery.min.js|static';
     $packagingSlipTable = IsotopePackagingSlipModel::getTable();
     $viewData = [
       'title' => $title,
