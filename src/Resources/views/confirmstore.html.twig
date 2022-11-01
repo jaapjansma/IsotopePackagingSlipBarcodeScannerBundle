@@ -134,14 +134,14 @@
         {{ form_end(form) }}
     </div>
     <script type="text/javascript">
-      window.addEvent('domready', function() {
-        $$('#form_document_number').val('');
-        $$('#form_document_number').focus();
-        $$('#form_document_number').keypress(function(event) {
-          if (event.keyCode == 13) {
-            $$('form[name=form]').submit();
-          }
+        window.addEvent('domready', function () {
+          $('form_document_number').set('value', '');
+          $('form_document_number').focus();
+          $('form_document_number').addEvent('keypress', function (event) {
+            if (event.keyCode == 13) {
+              $$('form[name=form]').submit();
+            }
+          });
         });
-      });
     </script>
 {% endblock %}
