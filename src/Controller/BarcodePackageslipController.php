@@ -172,7 +172,7 @@ class BarcodePackageslipController extends AbstractController {
         'class' => 'w50 widget clr'
       ]
     ]);
-    if ($request->getSession()->has('isotopepackagingslipbarcodescanner_shipping_date')) {
+    if ($newStatus != IsotopePackagingSlipModel::STATUS_PICKED_UP && $request->getSession()->has('isotopepackagingslipbarcodescanner_shipping_date')) {
       $shippingDate = new \DateTime();
       $shippingDate->setTimestamp($request->getSession()->get('isotopepackagingslipbarcodescanner_shipping_date'));
     }
@@ -261,16 +261,18 @@ class BarcodePackageslipController extends AbstractController {
         ->setData($submittedData['document_number']);
 
       $shippingDate = NULL;
-      if ($packagingSlip->shipping_date) {
+      if (!$shopId && $packagingSlip->shipping_date) {
         $shippingDate = new \DateTime();
         $shippingDate->setTimestamp($packagingSlip->shipping_date);
         $viewData['shippingDate'] = $shippingDate->format('d-m-Y H:i');
       } elseif ($submittedData['shipping_date']) {
         $shippingDate = $submittedData['shipping_date'];
       }
-      elseif ($request->getSession()->has('isotopepackagingslipbarcodescanner_shipping_date')) {
+      elseif (!$shopId && $request->getSession()->has('isotopepackagingslipbarcodescanner_shipping_date')) {
         $shippingDate = new \DateTime();
         $shippingDate->setTimestamp($request->getSession()->get('isotopepackagingslipbarcodescanner_shipping_date'));
+      } elseif ($shopId && $newStatus == IsotopePackagingSlipModel::STATUS_PICKED_UP) {
+        $shippingDate = new \DateTime();
       }
       $formBuilder->get('shipping_date')->setAttribute('required', TRUE);
       if ($shippingDate) {
