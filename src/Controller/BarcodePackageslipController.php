@@ -30,6 +30,7 @@ use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipModel;
 use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipShipperModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -159,11 +160,11 @@ class BarcodePackageslipController extends AbstractController {
         'class' => 'w50 widget clr'
       ],
     ]);
-    $formBuilder->add('shipping_date', DateType::class, [
+    $formBuilder->add('shipping_date', DateTimeType::class, [
       'label' => $GLOBALS['TL_LANG'][$packagingSlipTable]['shipping_date'][0],
       'required' => false,
       'widget' => 'single_text',
-      'input_format' => 'y-m-d',
+      'input_format' => 'yyyy-MM-dd HH:mm',
       'html5' => true,
       'attr' => [
         'class' => 'tl_text',
@@ -222,13 +223,16 @@ class BarcodePackageslipController extends AbstractController {
       if (isset($submittedData['confirm_document_number']) && $submittedData['confirm_document_number'] == $submittedData['document_number']) {
         /** @var \DateTime $shippingDate */
         $today = new \DateTime();
+        $tomorrow = new \DateTime();
+        $tomorrow->modify('+1 day');
+        $tomorrow->setTime(0, 0);
         $shippingDate = $submittedData['shipping_date'];
         if ($shippingDate) {
           $request->getSession()->set('isotopepackagingslipbarcodescanner_shipping_date', $shippingDate->getTimestamp());
         }
         $packagingSlip->status = $newStatus;
         if ($shippingDate) {
-          if ($shippingDate > $today) {
+          if ($shippingDate > $tomorrow) {
             $shippingDate->setTime(10, 0);
           }
           $packagingSlip->shipping_date = $shippingDate->getTimestamp();
