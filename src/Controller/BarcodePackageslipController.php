@@ -176,6 +176,7 @@ class BarcodePackageslipController extends AbstractController {
     if ($newStatus != IsotopePackagingSlipModel::STATUS_PICKED_UP && $request->getSession()->has('isotopepackagingslipbarcodescanner_shipping_date')) {
       $shippingDate = new \DateTime();
       $shippingDate->setTimestamp($request->getSession()->get('isotopepackagingslipbarcodescanner_shipping_date'));
+      $shippingDate->setTime((int) date('H'), (int) date('i'));
     }
     if ($shippingDate) {
       $formBuilder->get('shipping_date')->setData($shippingDate);
@@ -280,6 +281,7 @@ class BarcodePackageslipController extends AbstractController {
       }
       $formBuilder->get('shipping_date')->setAttribute('required', TRUE);
       if ($shippingDate) {
+        $shippingDate->setTime((int) date('H'), (int) date('i'));
         $formBuilder->get('shipping_date')->setData($shippingDate);
       }
 
