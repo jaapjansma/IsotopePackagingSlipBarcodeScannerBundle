@@ -173,6 +173,7 @@ class BarcodePackageslipController extends AbstractController {
         'class' => 'w50 widget clr'
       ]
     ]);
+    $shippingDate = false;
     if ($newStatus != IsotopePackagingSlipModel::STATUS_PICKED_UP && $request->getSession()->has('isotopepackagingslipbarcodescanner_shipping_date')) {
       $shippingDate = new \DateTime();
       $shippingDate->setTimestamp($request->getSession()->get('isotopepackagingslipbarcodescanner_shipping_date'));
