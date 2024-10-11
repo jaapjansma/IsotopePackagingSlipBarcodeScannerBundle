@@ -257,8 +257,8 @@ class BarcodePackageslipController extends AbstractController {
       $viewData['packagingSlip'] = $packagingSlip;
       $viewData['shippingMethod'] = $shippingMethod;
       $viewData['shippingMethodNote'] = '';
-      if ($shippingMethod->note) {
-        $viewData['shippingMethodNote'] = StringUtil::restoreBasicEntities($shippingMethod->note);
+      if ($shippingMethod->openingstijden) {
+        $viewData['shippingMethodNote'] = StringUtil::restoreBasicEntities($shippingMethod->openingstijden);
       }
       $viewData['shippingDate'] = '';
       $viewData['orders'] = $packagingSlip->getOrders();
