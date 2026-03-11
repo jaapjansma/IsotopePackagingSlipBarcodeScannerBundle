@@ -25,11 +25,11 @@ use Contao\System;
 use Isotope\Model\Shipping;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\FormBuilderEvent;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\FormBuilderWithPackagingSlipEvent;
+use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\FormValidationEvent;
 use Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event\PackagingSlipStatusChangedEvent;
 use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipModel;
 use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipShipperModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -194,7 +194,8 @@ class BarcodePackageslipController extends AbstractController {
     $formBuilder->add('confirm_document_number', HiddenType::class);
     $formBuilderEvent = new FormBuilderEvent($formBuilder, $shopId ?? '__store');
     System::getContainer()->get('event_dispatcher')->dispatch($formBuilderEvent, FormBuilderEvent::EVENT_NAME);
-    $viewData['additional_widgets'] = $formBuilderEvent->additionalWidgets;
+    $viewData['additional_widgets_first_screen'] = $formBuilderEvent->additionalWidgetsFirstScreen;
+    $viewData['additional_widgets_confirm_screen'] = $formBuilderEvent->additionalWidgets;
 
     $form = $formBuilder->getForm();
     $form->handleRequest($request);
@@ -222,7 +223,17 @@ class BarcodePackageslipController extends AbstractController {
         Message::addError($msg, 'isotopepackagingslipbarcodescanner_confirmstore');
         return $this->redirect($redirectUrl);
       }
-      if (isset($submittedData['confirm_document_number']) && $submittedData['confirm_document_number'] == $submittedData['document_number']) {
+
+      $formValidationEvent = new FormValidationEvent($form, $shopId ?? '__store', $packagingSlip);
+      System::getContainer()->get('event_dispatcher')->dispatch($formValidationEvent, FormValidationEvent::EVENT_NAME);
+      if (!$formValidationEvent->isValid) {
+        if (strlen($formValidationEvent->errorMessage)) {
+          Message::addError($formValidationEvent->errorMessage, 'isotopepackagingslipbarcodescanner_confirmstore');
+        }
+        if (!$formValidationEvent->stayOnCurrentScreen) {
+          return $this->redirect($redirectUrl);
+        }
+      } elseif (isset($submittedData['confirm_document_number']) && $submittedData['confirm_document_number'] == $submittedData['document_number']) {
         /** @var \DateTime $shippingDate */
         $today = new \DateTime();
         $tomorrow = new \DateTime();
@@ -288,7 +299,14 @@ class BarcodePackageslipController extends AbstractController {
         $formBuilder->get('shipping_date')->setData($shippingDate);
       }
 
-      $formBuilderWithPackagingSlipEvent = new FormBuilderWithPackagingSlipEvent($formBuilder, $shopId ?? '__store', $packagingSlip);
+      $viewData['scheduledShippingDate'] = '';
+      if (!$shopId && $packagingSlip->scheduled_shipping_date) {
+        $shippingDate = new \DateTime();
+        $shippingDate->setTimestamp($packagingSlip->scheduled_shipping_date);
+        $viewData['scheduledShippingDate'] = $shippingDate->format('d-m-Y H:i');
+      }
+
+      $formBuilderWithPackagingSlipEvent = new FormBuilderWithPackagingSlipEvent($formBuilder, $shopId ?? '__store', $packagingSlip, $submittedData);
       System::getContainer()->get('event_dispatcher')->dispatch($formBuilderWithPackagingSlipEvent, FormBuilderWithPackagingSlipEvent::EVENT_NAME);
 
       $form = $formBuilder->getForm();

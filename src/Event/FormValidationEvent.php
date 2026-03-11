@@ -18,17 +18,27 @@
 
 namespace Krabo\IsotopePackagingSlipBarcodeScannerBundle\Event;
 
+use Symfony\Component\Form\FormInterface;
 use Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipModel;
-use Symfony\Component\Form\FormBuilderInterface;
 
-class FormBuilderWithPackagingSlipEvent {
+class FormValidationEvent {
 
-  const EVENT_NAME = 'krabo.isotopepackagingslipbarcodescanner.form_builder_with_packaging_slip';
+  const EVENT_NAME = 'krabo.isotopepackagingslipbarcodescanner.form_validation';
 
   /**
-   * @var FormBuilderInterface
+   * @var bool
    */
-  public $formBuilder;
+  public bool $stayOnCurrentScreen = false;
+
+  /**
+   * @var bool
+   */
+  public bool $isValid = true;
+
+  /**
+   * @var string
+   */
+  public string $errorMessage = '';
 
   /**
    * @var string
@@ -36,17 +46,19 @@ class FormBuilderWithPackagingSlipEvent {
   public string $shopId;
 
   /**
+   * @var FormInterface
+   */
+  public FormInterface $form;
+
+    /**
    * @var \Krabo\IsotopePackagingSlipBundle\Model\IsotopePackagingSlipModel
    */
   public $packagingSlip;
 
-  public array $submittedData;
-
-  public function __construct(FormBuilderInterface $formBuilder, string $shopId, IsotopePackagingSlipModel $packagingSlip, $submittedData) {
-    $this->formBuilder = $formBuilder;
+  public function __construct(FormInterface $form, string $shopId, IsotopePackagingSlipModel $packagingSlip) {
+    $this->form = $form;
     $this->shopId = $shopId;
     $this->packagingSlip = $packagingSlip;
-    $this->submittedData = $submittedData;
   }
 
 }

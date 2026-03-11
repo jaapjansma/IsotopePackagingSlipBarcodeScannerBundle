@@ -22,6 +22,8 @@ $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirm_shop'] 
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['delivery_shop'] = ['Prepare for pickup \'%s\'', 'Barcode Scanner prepare for pickup at %s'];
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['confirmBarcodeStore'] = 'Confirm';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipNotFound'] = "No package slip found with status prepare for sending for %s";
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipWrongShipper'] = "Packaking Slip has shipper: %s. You are not picking orders for this shipper.";
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipWrongShippingDate'] = 'The shippping date does not match the scheduled shipping date in the packaging slip. Scan again to continue';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['OrderNotPaid'] = 'Order %s is not paid.';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['OrderPaid'] = 'Order %s is paid.';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['AmountToPaid'] = 'Amount to pay: %s';

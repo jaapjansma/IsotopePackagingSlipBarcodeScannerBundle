@@ -35,6 +35,11 @@ class FormBuilderEvent {
   public $additionalWidgets = [];
 
   /**
+   * @var array
+   */
+  public $additionalWidgetsFirstScreen = [];
+
+  /**
    * @var string
    */
   public string $shopId;
