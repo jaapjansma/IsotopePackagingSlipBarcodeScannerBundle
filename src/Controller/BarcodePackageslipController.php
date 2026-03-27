@@ -247,6 +247,8 @@ class BarcodePackageslipController extends AbstractController {
         if ($shippingDate) {
           if ($shippingDate > $tomorrow) {
             $shippingDate->setTime(10, 0);
+          } else {
+            $shippingDate = $today;
           }
           $packagingSlip->shipping_date = $shippingDate->getTimestamp();
         } elseif (empty($packagingSlip->shipping_date)) {
