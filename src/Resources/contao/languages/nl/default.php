@@ -29,3 +29,4 @@ $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['OrderPaid'] = '
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['AmountToPaid'] = 'Opstaand bedrag: %s';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['StatusUpdated'] = 'Status aangepast naar %s';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['NotEnoughInStock'] = 'Niet voorradig';
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['Shipper'] = 'Verzendmethode';

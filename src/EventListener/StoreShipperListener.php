@@ -77,7 +77,7 @@ class StoreShipperListener implements EventSubscriberInterface {
       $shippers[$objShippers->name] = $objShippers->id;
     }
     $event->formBuilder->add('shipper', ChoiceType::class, [
-      'label' => $GLOBALS['TL_LANG'][IsotopePackagingSlipModel::getTable()]['shipper'][0],
+      'label' => $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['Shipper'],
       'choices' => $shippers,
       'attr' => [
         'class' => 'tl_radio',
