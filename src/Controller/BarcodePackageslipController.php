@@ -201,6 +201,10 @@ class BarcodePackageslipController extends AbstractController {
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       $submittedData = $form->getData();
+      $shippingDate = $submittedData['shipping_date'];
+      if ($shippingDate) {
+        $request->getSession()->set('isotopepackagingslipbarcodescanner_shipping_date', $shippingDate->getTimestamp());
+      }
       $packagingSlip = IsotopePackagingSlipModel::findOneBy('document_number', $submittedData['document_number']);
       $isStoreShipper = false;
       if ($packagingSlip->shipper_id) {
@@ -239,10 +243,6 @@ class BarcodePackageslipController extends AbstractController {
         $tomorrow = new \DateTime();
         $tomorrow->modify('+1 day');
         $tomorrow->setTime(0, 0);
-        $shippingDate = $submittedData['shipping_date'];
-        if ($shippingDate) {
-          $request->getSession()->set('isotopepackagingslipbarcodescanner_shipping_date', $shippingDate->getTimestamp());
-        }
         $packagingSlip->status = $newStatus;
         if ($shippingDate) {
           if ($shippingDate > $tomorrow) {

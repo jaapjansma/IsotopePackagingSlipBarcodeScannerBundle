@@ -74,7 +74,8 @@ class ShipmentDateValidator implements EventSubscriberInterface {
     /** @var \DateTime $shippingDate */
     $submittedShippingDate = $submittedData['shipping_date'];
     $submittedShippingDate->setTime(0,0,0,0);
-    $expectedShippingDate = \DateTime::createFromFormat('U', $event->packagingSlip->scheduled_shipping_date);
+    $expectedShippingDate = new \DateTime();
+    $expectedShippingDate->setTimestamp($event->packagingSlip->scheduled_shipping_date);
     $expectedShippingDate->setTime(0,0,0);
     if ($expectedShippingDate != $submittedShippingDate && (empty($submittedData['confirm_shipping_date']) || $submittedData['confirm_shipping_date'] != $submittedShippingDate->getTimestamp())) {
       $event->errorMessage = sprintf($GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['PackageSlipWrongShippingDate']);
