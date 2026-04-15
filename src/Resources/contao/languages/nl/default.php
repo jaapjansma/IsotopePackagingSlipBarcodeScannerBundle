@@ -30,3 +30,4 @@ $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['AmountToPaid'] 
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['StatusUpdated'] = 'Status aangepast naar %s';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['NotEnoughInStock'] = 'Niet voorradig';
 $GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['Shipper'] = 'Verzendmethode';
+$GLOBALS['TL_LANG']['IsotopePackagingSlipBarcodeScannerBundle']['Weight'] = 'Gewicht';
